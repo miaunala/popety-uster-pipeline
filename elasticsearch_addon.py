@@ -114,29 +114,32 @@ def fetch_uster_addresses() -> list[dict]:
     all_addresses = []
     seen = set()
 
-    # Query each letter of the alphabet to get broad coverage
+    # All Uster postal codes (Zentrum, Nänikon, Sulzbach, Freudwil, Wermatswil, Riedikon)
+    USTER_ZIPS = {"8610", "8606", "8614", "8615", "8616"}
+
+    # Query each letter × each postal code to get broad coverage
     # (swisstopo limits results to 50 per query)
-    print("Fetching Uster addresses from swisstopo...")
-    for prefix in "abcdefghijklmnopqrstuvwxyz":
-        params = {
-            "type":       "locations",
-            "searchText": f"{prefix} uster 8610",
-            "lang":       "de",
-            "limit":      50,
-            "sr":         "4326",
-            "type":       "locations",
-        }
-        try:
-            r = requests.get(base_url, params=params, timeout=10)
-            if not r.ok:
-                continue
-            results = r.json().get("results", [])
-            for res in results:
-                attrs = res.get("attrs", {})
-                label = attrs.get("label", "")
-                # Only keep addresses in Uster (8610)
-                if "8610" not in label and "uster" not in label.lower():
+    print("Fetching Uster addresses from swisstopo (all postal codes)...")
+    for zip_code in USTER_ZIPS:
+        for prefix in "abcdefghijklmnopqrstuvwxyz":
+            params = {
+                "type":       "locations",
+                "searchText": f"{prefix} {zip_code}",
+                "lang":       "de",
+                "limit":      50,
+                "sr":         "4326",
+            }
+            try:
+                r = requests.get(base_url, params=params, timeout=10)
+                if not r.ok:
                     continue
+                results = r.json().get("results", [])
+                for res in results:
+                    attrs = res.get("attrs", {})
+                    label = attrs.get("label", "")
+                    # Only keep addresses in one of Uster's postal codes
+                    if not any(z in label for z in USTER_ZIPS):
+                        continue
                 detail = attrs.get("detail", "")
                 if detail in seen:
                     continue
