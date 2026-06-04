@@ -14,3 +14,5 @@ plots_wgs84.geojson
 
 # Geocoding cache (contains local paths, regenerate locally)
 geocode_cache.json
+# some notes
+prese*
