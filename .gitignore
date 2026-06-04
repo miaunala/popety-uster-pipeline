@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.idea/
+
+# macOS
+.DS_Store
+.Rhistory
+
+# Large data files (not needed on GitHub)
+79cb1aec092f4642bcc0cdcdbeb499c2/
+plots_lv95.geojson
+plots_wgs84.geojson
+
+# Geocoding cache (contains local paths, regenerate locally)
+geocode_cache.json
