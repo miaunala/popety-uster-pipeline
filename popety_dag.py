@@ -12,11 +12,7 @@ Download tasks: fetch source data, process, save as GeoJSON to DATA_DIR.
 Insert tasks:   load the GeoJSON into a PostGIS table in the local `geodb` database.
 """
 
-import os
-import re
-import sys
-import time
-import requests
+
 from datetime import datetime
 from pathlib import Path
 
